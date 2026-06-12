@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Trial Report · 试听课报告（原型）</title>
+<style>
+  :root{
+    --ink:#2c2b3a;
+    --ink-soft:#7d7c94;
+    --violet:#7b5cf0;
+    --radius:22px;
+    --c-lav:#eef0fb;
+    --c-mint:#ebf6ee;
+    --c-peach:#fdeee2;
+    --c-blue:#eaf1fe;
+    --c-cream:#fbf3df;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:#ffffff;
+    display:flex;justify-content:center;
+    padding-bottom:30px;
+  }
+  .phone{width:390px;max-width:100%;position:relative;background:#ffffff;}
+
+  .hero-img{display:block;width:100%;margin-bottom:-26px;}
+
+  /* ===== Cards ===== */
+  .stack{padding:0 14px;position:relative;z-index:2;}
+  .card{
+    background:#fff;border-radius:var(--radius);
+    box-shadow:0 14px 30px rgba(40,40,120,.16);
+    padding:18px 16px;margin-bottom:16px;
+  }
+  .chead{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .chead .ico{
+    width:34px;height:34px;border-radius:11px;display:flex;align-items:center;
+    justify-content:center;font-size:18px;color:#fff;flex:0 0 34px;
+  }
+  .ico.violet{background:linear-gradient(135deg,#a98cff,#7b5cf0);}
+  .ico.blue{background:linear-gradient(135deg,#67c0ff,#3f8df4);}
+  .ico.orange{background:linear-gradient(135deg,#ffc861,#ff9b3d);}
+  .chead h3{margin:0;font-size:18px;font-weight:900;}
+  .chead .en{font-size:10.5px;color:var(--ink-soft);font-weight:600;}
+  .chead .ai{margin-left:auto;font-size:10px;color:var(--violet);font-weight:800;
+    background:var(--c-lav);padding:4px 9px;border-radius:999px;}
+  .chead .level-badge{margin-left:auto;font-size:13px;font-weight:900;color:#fff;
+    display:flex;align-items:center;gap:4px;padding:6px 13px;border-radius:999px;
+    background:linear-gradient(135deg,#7b5cf0,#a98cff);
+    box-shadow:0 5px 12px rgba(123,92,240,.4);}
+  .chead .level-badge .st{font-size:13px;}
+  .avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;flex:0 0 38px;
+    box-shadow:0 3px 8px rgba(80,80,160,.2);}
+
+  /* sub headers */
+  .sub-h{font-size:15px;font-weight:900;margin:16px 0 10px;}
+
+  /* callout box */
+  .box{border-radius:15px;padding:13px 14px;margin-bottom:11px;}
+  .box p{margin:0;font-size:13.5px;line-height:1.65;}
+  .box .lbl{font-size:13px;font-weight:900;margin-bottom:6px;}
+  .box .en-lbl{font-size:10px;color:var(--ink-soft);font-weight:600;margin-left:5px;}
+  .box ol,.box ul{margin:6px 0 0;padding-left:20px;font-size:13.5px;line-height:1.75;}
+  .b-lav{background:var(--c-lav);}
+  .b-mint{background:var(--c-mint);}
+  .b-peach{background:var(--c-peach);}
+  .b-blue{background:var(--c-blue);}
+  .b-cream{background:var(--c-cream);}
+  .hl{color:var(--violet);font-weight:800;}
+  .quote{color:#ff7a3d;font-weight:700;}
+
+  /* ===== Level fusion ===== */
+  .level{
+    border-radius:18px;padding:16px;color:#fff;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#7b5cf0 0%,#a98cff 55%,#7aa6ff 100%);
+    margin-bottom:11px;
+  }
+  .level::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;
+    background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%);}
+  .level .lead{font-size:12px;opacity:.92;margin:0 0 6px;}
+  .level .badge{font-size:32px;font-weight:900;display:flex;align-items:center;gap:8px;line-height:1;}
+  .level .badge .st{font-size:24px;}
+  .map{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;}
+  .map span{background:rgba(255,255,255,.2);padding:4px 11px;border-radius:999px;font-size:11.5px;font-weight:600;}
+  .scale{display:flex;gap:5px;margin-top:15px;}
+  .scale .seg{flex:1;text-align:center;font-size:10px;font-weight:800;color:rgba(255,255,255,.65);}
+  .scale .bar{height:9px;border-radius:6px;background:rgba(255,255,255,.25);margin-bottom:5px;}
+  .scale .seg.done .bar{background:rgba(255,255,255,.55);}
+  .scale .seg.cur .bar{background:#ffd166;box-shadow:0 0 0 3px rgba(255,209,102,.35);}
+  .scale .seg.cur{color:#fff;}
+  .scale .cefr{display:block;font-size:8.5px;opacity:.7;font-weight:600;}
+
+  /* ===== 学习情况 ===== */
+  .score-line{font-size:15px;font-weight:800;margin:2px 0 10px;display:flex;align-items:center;gap:8px;}
+  .score-line b{font-size:22px;color:var(--ink);}
+  .score-line .coin{font-size:22px;}
+  .intro{font-size:13.5px;color:#4a4960;margin:0 0 14px;line-height:1.6;}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .tiles.three{grid-template-columns:repeat(3,1fr);gap:10px;}
+  .tiles.three .tic{font-size:26px;margin-bottom:8px;}
+  .tiles.three .tag{font-size:23px;}
+  .tiles.three .sub{margin-bottom:0;}
+  .tag .unit{font-size:13px;font-weight:800;margin-left:1px;}
+  .tile{border-radius:18px;padding:18px 10px 16px;text-align:center;}
+  .tile.lav{background:var(--c-lav);}
+  .tile.mint{background:var(--c-mint);}
+  .tile.peach{background:var(--c-peach);}
+  .tile.blue{background:var(--c-blue);}
+  .tile .tic{font-size:30px;line-height:1;margin-bottom:10px;}
+  .tile .tag{font-size:19px;font-weight:900;margin-bottom:3px;}
+  .tag.p{color:var(--violet);} .tag.g{color:#22c08b;}
+  .tag.o{color:#ff7a3d;} .tag.b{color:#3f8df4;}
+  .tile .sub{font-size:12.5px;color:#5a5872;font-weight:700;margin-bottom:11px;}
+  .dots{display:flex;gap:5px;justify-content:center;}
+  .dots i{width:15px;height:7px;border-radius:4px;background:#fff;opacity:.65;display:block;}
+  .dots i.on{opacity:1;}
+  .dots.p i.on{background:var(--violet);} .dots.g i.on{background:#22c08b;}
+  .dots.o i.on{background:#ff7a3d;} .dots.b i.on{background:#3f8df4;}
+
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+
+  .expand{text-align:center;color:var(--ink-soft);font-size:13px;font-weight:700;padding:12px 0 2px;cursor:pointer;}
+  .expand.o{color:#ff7a3d;}
+
+  /* ===== 发音分析 ===== */
+  .segtab{display:flex;background:#fdf0e6;border-radius:999px;padding:5px;margin-bottom:15px;}
+  .segtab button{flex:1;border:none;background:transparent;font-size:13.5px;font-weight:800;
+    color:#bb8e6e;padding:9px 0;border-radius:999px;cursor:pointer;}
+  .segtab button.on{background:linear-gradient(135deg,#ffb24d,#ff8a3d);color:#fff;
+    box-shadow:0 5px 12px rgba(255,140,60,.4);}
+  .colhead{display:flex;align-items:center;font-size:12px;color:var(--ink-soft);font-weight:700;padding:0 2px 9px;}
+  .colhead .l{flex:1;}
+  .colhead .c{width:54px;text-align:center;}
+  .colhead .divv{width:1px;height:13px;background:#e3e0ee;}
+  .dot-div{border-top:2px dotted #ecdccd;margin-bottom:2px;}
+  .wrow{display:flex;align-items:center;padding:13px 2px;border-bottom:1px solid #f4f2fa;}
+  .wrow:last-of-type{border-bottom:none;}
+  .wrow .w{flex:1;font-size:15px;font-weight:700;}
+  .spk{width:54px;display:flex;justify-content:center;}
+  .spk button{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;
+    background:transparent;color:#ff7a3d;font-size:18px;display:flex;align-items:center;justify-content:center;}
+
+  .legal{text-align:center;font-size:12px;color:#a8a6bd;padding:8px 24px 4px;}
+
+  /* ===== 底部 CTA ===== */
+  .cta-spacer{height:88px;}
+  .cta-bar{
+    position:sticky;bottom:0;left:0;right:0;width:390px;max-width:100%;margin:0 auto;
+    padding:12px 16px calc(14px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.92) 35%,#ffffff 100%);
+    z-index:10;
+  }
+  .cta-btn{
+    display:block;width:100%;border:none;cursor:pointer;
+    background:linear-gradient(135deg,#ff9b3d,#ff7a3d);color:#fff;
+    font-size:17px;font-weight:900;letter-spacing:.5px;
+    padding:16px;border-radius:16px;
+    box-shadow:0 10px 24px rgba(255,120,60,.45);
+  }
+  .cta-btn .small{display:block;font-size:11px;font-weight:600;opacity:.92;margin-top:2px;}
+</style>
+</head>
+<body>
+  <div class="phone">
+
+    <!-- ===== Header (复用示例插画) ===== -->
+    <img class="hero-img" src="assets_trial_hero.png" alt="Trial Report" />
+
+    <div class="stack">
+
+      <!-- ===== 1. AI老师点评 + 定级（融合·置顶·精简） ===== -->
+      <div class="card">
+        <div class="chead">
+          <img class="avatar" src="assets_trial_avatar.png" alt="" />
+          <h3>AI 老师点评</h3>
+          <span class="level-badge"><span class="st">⭐</span>Level 3</span>
+        </div>
+
+        <!-- 总评：推荐级别融合到一句话点评 -->
+        <div class="box b-lav">
+          <p><b>Tommy</b>，你对英语交流充满热情，<span class="hl">发音清晰、表达自然</span>，已经有了很不错的基础！定级 <span class="hl">CEFR·A1+，对标推荐到 Level 3</span>。</p>
+        </div>
+
+        <!-- 优秀表现（2条） -->
+        <div class="sub-h">优秀表现</div>
+        <div class="box b-mint">
+          <p>🗣️ 参与度极高，主动用 <span class="quote">"small community"</span> 等表达分享想法，课堂互动非常活跃！</p>
+        </div>
+        <div class="box b-peach">
+          <p>🎯 <span class="quote">"fountain"</span>、<span class="quote">"magnetic"</span> 等高级词汇发音标准，还能在对话中准确运用！</p>
+        </div>
+
+        <!-- 提升空间（1条） -->
+        <div class="sub-h">提升空间</div>
+        <div class="box b-cream">
+          <p>💡 单词 <span class="quote">"supplies"</span> 的发音偶尔会混成 <span class="quote">"surprise"</span>，课后多听原音、模仿嘴型会更棒！</p>
+        </div>
+      </div>
+
+      <!-- ===== 2. 学习情况（无数字·表现标签版） ===== -->
+      <div class="card">
+        <div class="chead">
+          <span class="ico violet">📈</span>
+          <h3>学习情况</h3>
+        </div>
+        <div class="score-line">本节课获得 <b>192</b><span class="coin">🪙</span></div>
+        <p class="intro">完美聚焦今天的【科学】主题！宝贝的好奇心就是你的超能力，小小【未来科学家】！</p>
+
+        <div class="tiles three">
+          <div class="tile lav">
+            <div class="tic">⏰</div>
+            <div class="tag p">56<span class="unit">m</span></div>
+            <div class="sub">上课时长</div>
+          </div>
+          <div class="tile mint">
+            <div class="tic">💡</div>
+            <div class="tag g">66</div>
+            <div class="sub">参与答题</div>
+          </div>
+          <div class="tile peach">
+            <div class="tic">😀</div>
+            <div class="tag o">36</div>
+            <div class="sub">开口次数</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 3. 课堂所学 ===== -->
+      <div class="card">
+        <div class="chead">
+          <span class="ico blue">📖</span>
+          <h3>课堂所学</h3>
+        </div>
+
+        <div class="box b-lav"><div class="lbl">主题 <span class="en-lbl">Topic</span></div><p>Daily Wear</p></div>
+        <div class="box b-lav"><div class="lbl">篇章标题 <span class="en-lbl">Title</span></div><p>Clothes That Changed History</p></div>
+        <div class="box b-mint"><div class="lbl">核心词汇 <span class="en-lbl">Vocabulary</span></div><p>trench coat, raincoat, high heels, suit</p></div>
+        <div class="box b-cream">
+          <div class="lbl">重点表达 <span class="en-lbl">Key Sentences</span></div>
+          <ol>
+            <li>The trench coat became famous thanks to Sherlock Holmes.</li>
+            <li>The raincoat became a royal favorite thanks to Queen Elizabeth II.</li>
+            <li>King Louis XIV loved his red high heels so much that only his rich friends were allowed to wear them!</li>
+          </ol>
+        </div>
+        <div class="box b-peach">
+          <div class="lbl">阅读策略 <span class="en-lbl">Reading Skills</span></div>
+          <ol>
+            <li>Predict from Title and Picture</li>
+            <li>Find Details and Facts</li>
+            <li>Get the Gist</li>
+          </ol>
+        </div>
+        <div class="expand">收起 ⌃</div>
+      </div>
+
+      <!-- ===== 4. 发音分析 ===== -->
+      <div class="card">
+        <div class="chead">
+          <span class="ico orange">💬</span>
+          <h3>发音分析</h3>
+        </div>
+
+        <div class="segtab">
+          <button class="on">太棒了！</button>
+          <button>很好！</button>
+          <button>很好的尝试！</button>
+        </div>
+
+        <div class="colhead"><span class="l">词句</span><span class="c">学生</span><span class="divv"></span><span class="c">老师</span></div>
+        <div class="dot-div"></div>
+
+        <div class="wrow"><span class="w">headphones</span><span class="spk"><button>🔊</button></span><span class="spk"><button>🔊</button></span></div>
+        <div class="wrow"><span class="w">school</span><span class="spk"><button>🔊</button></span><span class="spk"><button>🔊</button></span></div>
+        <div class="wrow"><span class="w">circle</span><span class="spk"><button>🔊</button></span><span class="spk"><button>🔊</button></span></div>
+        <div class="wrow"><span class="w">These are headphones</span><span class="spk"><button>🔊</button></span><span class="spk"><button>🔊</button></span></div>
+        <div class="wrow"><span class="w">These are headphones</span><span class="spk"><button>🔊</button></span><span class="spk"><button>🔊</button></span></div>
+        <div class="expand o">展开 ⌄</div>
+      </div>
+
+      <p class="legal">以上部分内容由 AI 生成，该定级结果仅供参考</p>
+
+      <div class="cta-spacer"></div>
+    </div>
+
+    <!-- 底部固定 CTA -->
+    <div class="cta-bar">
+      <button class="cta-btn">领取 Tommy 的专属学习计划
+        <span class="small">基于 Level 3 为你定制 · 立即开启系统学习</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.spk button').forEach(b=>{
+      b.addEventListener('click',()=>{b.style.transform='scale(1.25)';setTimeout(()=>b.style.transform='',250);});
+    });
+    document.querySelectorAll('.segtab button').forEach(b=>{
+      b.addEventListener('click',()=>{document.querySelectorAll('.segtab button').forEach(x=>x.classList.remove('on'));b.classList.add('on');});
+    });
+  </script>
+</body>
+</html>
