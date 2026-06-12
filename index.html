@@ -275,7 +275,7 @@
           <button class="on">太棒了！</button>
         </div>
 
-        <div class="weak-tip">
+        <div class="weak-tip" id="weakTip" hidden>
           <span class="ic">🎯</span>
           <span>AI 已为你分析出薄弱发音项，快来查看并继续练习，进步看得见！</span>
         </div>
@@ -308,9 +308,15 @@
     document.querySelectorAll('.spk button').forEach(b=>{
       b.addEventListener('click',()=>{b.style.transform='scale(1.25)';setTimeout(()=>b.style.transform='',250);});
     });
+    const weakTip=document.getElementById('weakTip');
+    const syncWeakTip=()=>{
+      const active=document.querySelector('.segtab button.on');
+      weakTip.hidden=!(active && active.textContent.includes('很好的尝试'));
+    };
     document.querySelectorAll('.segtab button').forEach(b=>{
-      b.addEventListener('click',()=>{document.querySelectorAll('.segtab button').forEach(x=>x.classList.remove('on'));b.classList.add('on');});
+      b.addEventListener('click',()=>{document.querySelectorAll('.segtab button').forEach(x=>x.classList.remove('on'));b.classList.add('on');syncWeakTip();});
     });
+    syncWeakTip();
   </script>
 </body>
 </html>
